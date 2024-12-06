@@ -12,15 +12,209 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Background information
 
 explain why I chose smoking data and maybe where my data comes from??
+This data package contains the data that powers the chart ["Share of adults who smoke"](https://ourworldindata.org/grapher/share-of-adults-who-smoke?v=1&csvType=full&useColumnShortNames=false) on the Our World in Data website
+https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators  
 
 ## Research question 
 
+How does the prevalence of smoking in adults across the world vary in the dataset, and what trends or patterns emerge from this analysis? 
+
 ## Project Organization 
+The PSY6422_smoke repository is organized into key sections to help you navigate its contents. The /codebook folder provides detailed documentation on the dataset, including variable descriptions and structure, offering essential context for the analysis. The /data folder contains the raw datasets used in this project, forming the basis of all analyses. The /figures folder showcases visualizations and plots created during the analysis, highlighting the project’s key findings and insights. Lastly, the /scripts folder includes all the code used for data processing, analysis, and visualization. Together, these sections guide you through the project workflow, from raw data to final outputs.
+
 
 ## Data set 
+# data set origirs 
+The raw dataset for this visualization project comes from : Multiple sources compiled by World Bank (2024) – processed by Our World in Data. “Prevalence of current tobacco use (% of adults)” [dataset]. World Health Organization (via World Bank), “World Development Indicators” [original data].
+Source: Multiple sources compiled by World Bank (2024) – processed by Our World In Data
+
+The percentage of the population ages 15 years and over who currently use any tobacco product (smoked and/or smokeless tobacco) on a daily or non-daily basis. Tobacco products include cigarettes, pipes, cigars, cigarillos, waterpipes (hookah, shisha), bidis, kretek, heated tobacco products, and all forms of smokeless (oral and nasal) tobacco. Tobacco products exclude e-cigarettes (which do not contain tobacco), “e-cigars”, “e-hookahs”, JUUL and “e-pipes”. The rates are age-standardized to the WHO Standard Population.
+
+
+
+# limitations
+These considerations are important when interpreting the project's results 
+Estimates for countries with irregular surveys or many data gaps have large uncertainty ranges, and such results should be interpreted with caution.
 
 ## Data preparation 
+# install packages
+```{r}
+# Function to install and load packages
+install_and_load <- function(packages) {
+  for (package in packages) {
+    if (!require(package, character.only = TRUE)) {
+      install.packages(package)
+      library(package, character.only = TRUE)
+    }
+  }
+}
+
+# List of packages
+packages <- c("tidyverse", "ggplot2", "tidyr", "dplyr", "plotly", "rnaturalearth", "rnaturalearthdata", "sf" )
+
+# Use the function to install and load all packages
+install_and_load(packages)
+```
+# Load Libraries 
+```{r}
+#Load libraries 
+library(tidyverse)
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+library(plotly)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(sf)
+```
+
+# Load data 
+```{r}
+# Load raw data
+rawdata <- read.csv("smoking.csv")
+```
+
+# creating variables 
+
+In order to create my visualization, I had to create new variables. 
+I got variable world from the function sf, which contains the resources necessary for my analysis. 
+I then merged my world data and my smoking data into 'map_data' via the ISO code. 
+
+
+# cleaning data
+after my initial sanity check, I started to clean my data. 
+The data contained specific entities such as different regions of the globe and the different income levels. In order to visualize the data I had to take these out. Further more, I wanted to visualize the data by 5 years so i got rid of 2018 and 2019. 
+I also renamed the variable prevalence for ease.and fixed my missing isos
+
+
+```{r}
+# Clean data: Remove specific entities
+countries_data <- rawdata[!rawdata$Entity %in% c("East Asia and Pacific (WB)", "Sub-Saharan Africa (WB)", 
+                                                 "Upper-middle-income countries", "Europe and Central Asia (WB)", 
+                                                 "World", "European Union (27)", "Low-income countries", 
+                                                 "Lower-middle-income countries", "Middle East and North Africa (WB)", 
+                                                 "Middle-income countries", "North America (WB)", "South Asia (WB)", 
+                                                 "Latin America and Caribbean (WB)", "High-income countries"), ]
+
+# Further clean data: Exclude years 2018 and 2019
+countries_data <- countries_data %>%
+  filter(!(Year %in% c(2018, 2019)))
+
+# Rename the column
+countries_data <- countries_data %>%
+  rename(Prevalence = Prevalence.of.current.tobacco.use....of.adults.) 
+
+# Fix missing ISO codes
+fix_iso_codes <- function(world_data) {
+  world_data %>%
+    mutate(iso_a3 = ifelse(name == "France", "FRA", iso_a3)) %>%
+    mutate(iso_a3 = ifelse(name == "Norway", "NOR", iso_a3))
+}
+world <- fix_iso_codes(world)
+
+# Replace NA prevalence values with 0
+map_data <- map_data %>%
+  mutate(Prevalence = ifelse(is.na(Prevalence), 0, Prevalence))
+
+
+```
+
+
+
+# description of the cleaned data 
+Entity refers to the name of the country. Code refers to the OWID internal entity code that we use if the entity is a country or region. Year refers to the years of the prevalence. Prevalence.of.current.tobacco.use....of.adults. refers to the prevalence of current tobacco users. 
+
+#
 
 ## Initial visualization 
+```{r}
+subset_data <- plot_data %>% filter(Year %in% c(2000, 2005))
+subset_data2 <- plot_data %>% filter(Year %in% c(2010, 2015, 2020))
+
+combined_data <- bind_rows(subset_data, subset_data2)
+
+
+# Plot using combined data
+plot <- plot_ly(
+  data = combined_data,
+  type = "choropleth",
+  locations = ~iso_a3,
+  locationmode = "ISO-3",
+  z = ~Prevalence,
+  frame = ~Year,
+  text = ~paste("Country:", Entity, "<br>Prevalence:", Prevalence, "%"),
+  colorscale = "Reds",
+  zmin = 0,
+  zmax = 68.5,
+  showscale = TRUE
+) %>%
+  layout(
+    title = "Global Smoking Prevalence (Subset Test)",
+    geo = list(
+      projection = list(type = "mercator"),
+      showcoastlines = TRUE,
+      coastlinecolor = "grey"
+    )
+  )
+plot
+
+```
 
 ## final visualization 
+```{r}
+
+plot <- plot_ly(
+  data = combined_data,
+  type = "choropleth",
+  locations = ~iso_a3,
+  locationmode = "ISO-3",
+  z = ~Prevalence,
+  frame = ~Year,
+  text = ~paste(
+    "Country:", Entity, 
+    ifelse(is.na(Prevalence), "<br>No Data", paste0("<br>Prevalence: ", Prevalence, "%"))
+  ),
+  colorscale = list(
+    c(0, "#ffeda0"),   # Low prevalence: light orange
+    c(0.5, "#feb24c"), # Medium prevalence: orange
+    c(1, "#67000d")    # High prevalence: dark red
+  ),
+  zmin = 0,
+  zmax = 68.5,
+  showscale = TRUE,
+  marker = list(line = list(color = "grey", width = 0.5))  # Border for the countries
+) %>%
+  layout(
+    title = "Global Smoking Prevalence (Subset Test)",
+    geo = list(
+      projection = list(type = "equirectangular"),  # Rectangular projection
+      showcoastlines = TRUE,                # Show coastlines
+      coastlinecolor = "grey",              # Set coastline border color
+      showcountries = TRUE,                 # Ensure country borders are shown
+      countrycolor = "grey",                # Set country border color
+      showland = TRUE,                      # Show land explicitly
+      landcolor = "white",                  # Set land colour to white
+      showocean = TRUE,                     # Enable ocean rendering
+      oceancolor = "lightblue",             # Set ocean colour to light blue
+      showframe = FALSE                     # Optionally remove frame border
+    ),
+    annotations = list(
+      list(
+        x = 0.5,                            # Position for the note (to the right of the map)
+        y = -0.1,                            # Vertical position (lower part of the map)
+        xref = "paper",                     # Reference the x-axis relative to the paper
+        yref = "paper",                     # Reference the y-axis relative to the paper
+        text = "Note: White regions indicate missing data.", # Your note
+        showarrow = FALSE,                  # Disable arrow pointing
+        font = list(size = 12, color = "black"), # Font size and color
+        align = "left"
+      )
+    )
+  )
+
+# Display the plot
+plot
+
+
+```
+
