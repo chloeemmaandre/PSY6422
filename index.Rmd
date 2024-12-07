@@ -113,7 +113,7 @@ print(missing_in_world)
 missing_in_data <- setdiff(world$iso_a3, countries_data$Code)
 print(missing_in_data)
 
-# Fix missing ISO codes (if needed)
+# Fix missing ISO codes
 fix_iso_codes <- function(world_data) {
   world_data %>%
     mutate(iso_a3 = ifelse(name == "France", "FRA", iso_a3)) %>%
@@ -124,7 +124,7 @@ world <- fix_iso_codes(world)
 
 # Merging data, sanity check and cleaning the merged data
 ```{r}
-
+# Merge datasets, sanity check/clean merged data 
 # Merge datasets
 map_data <- world %>%
   left_join(countries_data, by = c("iso_a3" = "Code"))
@@ -158,6 +158,7 @@ print(missing_prevalence)
 # Distribution of years and countries
 table(plot_data$Year)
 table(plot_data$iso_a3)
+
 ```
 
 
@@ -179,6 +180,21 @@ I also renamed the variable prevalence for ease.and fixed my missing isos
 # description of the cleaned data 
 Entity refers to the name of the country. Code refers to the OWID internal entity code that we use if the entity is a country or region. Year refers to the years of the prevalence. Prevalence.of.current.tobacco.use....of.adults. refers to the prevalence of current tobacco users. 
 
-#
 
-## Initial visualization 
+## Initial visualization
+This is the very first visualization I got for my data. 
+The initial visualization provided a basic representation of smoking prevalence on a static map. While it successfully displayed the prevalence rates for countries, it lacked interactivity and failed to account for changes across years. Users could not explore how smoking prevalence evolved over time or access specific data points for each country. The map presented a single snapshot without the ability to delve into detailed information, such as individual country names or exact prevalence percentages. These limitations highlighted the need for a more dynamic and informative visualization to enhance user engagement and understanding.
+
+```{r}
+ggplot(data = map_data) +
+  geom_sf(aes(fill = Prevalence), color = "white", size = 0.2) +
+  scale_fill_gradient(low = "blue", high = "red", na.value = "grey") +
+  labs(title = "Global Smoking Prevalence Heatmap",
+       fill = "Prevalence (%)") +
+  theme_minimal()
+
+```
+
+## Final visualization 
+
+
