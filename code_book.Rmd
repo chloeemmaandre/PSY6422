@@ -1,30 +1,24 @@
 ---
-title: "codebook"
+title: "Codebook"
 author: "C. Andre"
 date: "2024-12-07"
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+## Dataset Overview
 
-## R Markdown
+- **Dataset Name**: Smoking Prevalence Worldwide
+- **Source**: World Health Organization (via World Bank)
+- **Time Period**: 2000–2020
+- **Population**: Adults aged 15 years and older
+- **Variables**: Information about smoking prevalence across countries
+- **Limitations**: Data gaps and irregular surveys may result in uncertainty.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Variables
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+| **Variable Name** | **Description**                     | **Type**      | **Range/Values**       | **Missing Values** |
+|--------------------|-------------------------------------|---------------|-------------------------|---------------------|
+| `Entity`           | Country name                       | Categorical   | List of country names  | None               |
+| `Code`             | ISO-3 country code                 | Categorical   | ISO-3 codes            | None               |
+| `Year`             | Year of the record                 | Numeric       | 2000–2020              | None               |
+| `Prevalence`       | Smoking prevalence (% of adults)   | Numeric       | 0.0–68.5               | `NA` for missing   |
