@@ -1,6 +1,5 @@
 ---
 title: "PSY6422_smoke"
-author: "C. Andre"
 date: "2024-12-06"
 output: html_document
 ---
