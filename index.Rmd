@@ -35,7 +35,7 @@ Estimates for countries with irregular surveys or many data gaps have large unce
 # install packages
 ```{r install and load packages}
 # List of packages to install and load
-packages <- c("tidyverse", "ggplot2", "tidyr", "dplyr", "plotly", "rnaturalearth", "rnaturalearthdata", "sf")
+packages <- c("tidyverse", "ggplot2", "tidyr", "dplyr", "plotly", "rnaturalearth", "rnaturalearthdata", "sf", "htmlwidgets")
 
 # Function to install packages and load them
 install_and_load <- function(packages) {
@@ -265,6 +265,10 @@ plot <- plot_ly(
 plot
 
 ```
+
+
+
+
 
 ## final visualization 
 ```{r final viz}
