@@ -71,7 +71,7 @@ library(sf)
 # Load data 
 ```{r}
 # Load raw data
-rawdata <- read.csv("smoking.csv")
+rawdata <- read.csv("data/smoking.csv")
 ```
 
 # creating variables 
