@@ -55,6 +55,7 @@ install_and_load(packages)
 ```
 
 # Load data 
+
 ```{r load the data}
 # Load raw data
 rawdata <- read.csv("data/smoking.csv")
