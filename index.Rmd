@@ -1,13 +1,13 @@
 ---
 title: "PSY6422 Global Smoking Prevalence Analysis (2000-2020)"
 date: "2024-12-06"
-output: html_document
+output:
 flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: scroll
+    orientation: rows
+    vertical_layout: fill
 ---
 
-Column {data-width=250}
+Column {data-width=300}
 -----------------------------------------------------------------------
 
 ### Navigation
@@ -29,8 +29,9 @@ Column {data-width=250}
 - [Initial Visualization](#initial-visualisation)
 - [Final Visualization](#final-visualisation)
 
-Column {data-width=750}
+Column {data-width=700}
 -----------------------------------------------------------------------
+
 ### Background Information {#background-information}
 
 Smoking is one of the leading causes of preventable deaths globally, contributing significantly to a wide range of health problems, including cardiovascular diseases, respiratory conditions, and various cancers. Over the years, many countries have implemented measures to reduce smoking prevalence, such as public health campaigns, tobacco taxes, smoking bans in public areas, and regulations on tobacco advertising. Despite these efforts, smoking continues to affect millions of people worldwide, with its prevalence varying significantly across regions and populations. By investigating the prevalence of smoking among adults globally from 2000 to 2020, this study aims to explore and identify patterns or disparities in smoking behaviours. Understanding these trends is crucial for informing future public health strategies and reducing the global burden of tobacco-related diseases.
