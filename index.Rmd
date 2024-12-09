@@ -1,89 +1,86 @@
 ---
-title: "PSY6422 Global Smoking Prevalence Analysis (2000-2020)"
+title: '<b>PSY6422 Global Smoking Prevalence Analysis (2000-2020)</b>'
 date: "2024-12-06"
 output:
 flexdashboard::flex_dashboard:
-    orientation: rows
+    orientation: columns
     vertical_layout: fill
+    navbar:
+      - {title: "Navigation", href: "#navigation"}
 ---
 
-Column {data-width=300}
+{data-width=250}
 -----------------------------------------------------------------------
 
-### Navigation
+## Navigation
 
 - [Background Information](#background-information)
 - [Research Question](#research-question)
 - [Project Organisation](#project-organisation)
-- Dataset
-  - [Dataset Origins](#dataset-origins)
-  - [Limitations](#limitations)
-- Data Preparation
-  - [Installing Packages](#installing-packages)
-  - [Load Data](#load-data)
-  - [Sanity Check](#sanity-check)
-  - [Clean Data](#clean-data)
-  - [Merge Data](#merge-data)
-  - [Description of Data](#description-of-data)
-- [Initial Visualizations](#initial-visualisations)
-- [Final Visualization](#final-visualisation)
+- [Dataset](#dataset)
+    - [Dataset Origins](#dataset-origins)
+    - [Limitations](#limitations)
+- [Data Preparation](#data-preparation)
+    - [Installing Packages](#installing-packages)
+    - [Load Data](#load-data)
+    - [Sanity Check](#sanity-check)
+    - [Clean Data](#clean-data)
+    - [Load-and-Clean-to-merge](#load-and-Clean-to-merge)
+    - [Merge Data](#merge-data)
+- [Description of Data](#description-of-data)
+- [Visualisations](#initial-visualisations)
+    - [Initial Visualisation](#initial-visualisation)
+    - [Second Visualisation](#second-visualisation)
+    - [Final Visualisation](#final-visualisation)
+- [rerferences](#rerferences)
 
-Column {data-width=700}
+{data-width=750}
 -----------------------------------------------------------------------
 
-### Background Information {#background-information}
+## Background Information {#background-information}
 
-Smoking is one of the leading causes of preventable deaths globally, contributing significantly to a wide range of health problems, including cardiovascular diseases, respiratory conditions, and various cancers. Over the years, many countries have implemented measures to reduce smoking prevalence, such as public health campaigns, tobacco taxes, smoking bans in public areas, and regulations on tobacco advertising. Despite these efforts, smoking continues to affect millions of people worldwide, with its prevalence varying significantly across regions and populations. By investigating the prevalence of smoking among adults globally from 2000 to 2020, this study aims to explore and identify patterns or disparities in smoking behaviours. Understanding these trends is crucial for informing future public health strategies and reducing the global burden of tobacco-related diseases.
-
----
-
-### Research Question {#research-question}
-
-How does the prevalence of smoking in adults across the world vary in the dataset, and what trends or patterns emerge from this analysis? 
+Smoking is one of the leading causes of preventable deaths globally, contributing significantly to a wide range of health problems, including cardiovascular diseases, respiratory conditions, and various cancers. Over the years, many countries have implemented measures to reduce smoking prevalence, such as public health campaigns, tobacco taxes, smoking bans and regulations on tobacco advertising. Despite these efforts, smoking continues to affect millions of people worldwide, with its prevalence varying significantly across regions and populations. By investigating the prevalence of smoking among adults globally from 2000 to 2020, this study aims to explore and identify patterns or disparities in smoking behaviours. Understanding these trends is crucial for informing future public health strategies and reducing the global burden of tobacco-related diseases.
 
 ---
 
-### Project Organisation {#project-organisation}
+## Research Question {#research-question}
 
-The project repository includes:
-- **Codebook:** Detailed variable descriptions.
-- **Data Folder:** Contains the raw and processed datasets.
-- **Figures Folder:** Visualizations created during analysis.
-- **Scripts Folder:** R scripts for cleaning, analysis, and plotting.
-
-
-The PSY6422_smoke repository is organized into key sections to help you navigate its contents. The /codebook folder provides detailed documentation on the dataset, including variable descriptions and structure, offering essential context for the analysis. The /data folder contains the raw datasets used in this project, forming the basis of all analyses. The /figures folder showcases visualizations and plots created during the analysis, highlighting the project’s key findings and insights. Lastly, the /scripts folder includes all the code used for data processing, analysis, and visualization. Together, these sections guide you through the project workflow, from raw data to final outputs.
+How does the prevalence of smoking in adults across the world vary and what trends emerge from this analysis? 
 
 ---
 
-### Dataset
+## Project Organisation {#project-organisation}
+
+The project is organised into key sections to help you navigate its contents.
+The **Codebook** folder provides detailed documentation on the dataset, including variable descriptions and structure.
+The **Data Folder** Contains the raw datasets.
+The **Plots Folder** contains Visualisations created during analysis.
+The **Scripts Folder** contains the code used for data processing, analysis, and visualisation.
+
+---
+
+## Dataset
 
 #### Dataset Origins {#dataset-origins}
 
-The raw dataset for this visualization project comes from Multiple sources compiled by World Bank (2024) – processed by Our World in Data. “Prevalence of current tobacco use (% of adults)” [dataset]. World Health Organization (via World Bank), “World Development Indicators” [original data].
-Source: Multiple sources compiled by World Bank (2024) – processed by Our World In Data
+The raw dataset for this visualisation project comes from Multiple sources compiled by World Bank (2024) – processed by Our World In Data. “Prevalence of current tobacco use (% of adults)” [dataset]
 
-This data package contains the data that powers the chart ["Share of adults who smoke"](https://ourworldindata.org/grapher/share-of-adults-who-smoke?v=1&csvType=full&useColumnShortNames=false) on the Our World in Data website
-https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators
-
-The percentage of the population ages 15 years and over who currently use any tobacco product (smoked and/or smokeless tobacco) on a daily or non-daily basis. Tobacco products include cigarettes, pipes, cigars, cigarillos, waterpipes (hookah, shisha), bidis, kretek, heated tobacco products, and all forms of smokeless (oral and nasal) tobacco. Tobacco products exclude e-cigarettes (which do not contain tobacco), “e-cigars”, “e-hookahs”, JUUL and “e-pipes”. The rates are age-standardized to the WHO Standard Population.
+This data represents the percentage of the population ages 15 years and over who currently use any tobacco product (smoked and/or smokeless tobacco) on a daily or non-daily basis. Tobacco products include cigarettes, pipes, cigars, cigarillos, waterpipes, bidis, kretek, heated tobacco products, and all forms of smokeless (oral and nasal) tobacco. 
+Tobacco products exclude e-cigarettes (which do not contain tobacco), “e-cigars”, “e-hookahs”, JUUL and “e-pipes”. 
+The rates are age-standardized to the WHO Standard Population.
 
 #### Limitations {#limitations}
 
-- Large uncertainty in countries with irregular surveys or missing data.
-- Estimates exclude e-cigarettes and other non-tobacco products.
-
-These considerations are important when interpreting the project's results 
-Estimates for countries with irregular surveys or many data gaps have large uncertainty ranges, and such results should be interpreted with caution.
+When interpreting the project's results, it is important to consider the limitations of the dataset. Countries with irregular surveys or significant gaps in data contribute to large uncertainties in the estimates, making these results less reliable. Additionally, the dataset excludes information on e-cigarettes and other non-tobacco products, focusing solely on traditional tobacco use. These limitations mean that the findings should be interpreted with caution, particularly for countries with incomplete or inconsistent data, as the trends and prevalence rates presented may not fully capture the complexity of smoking behaviours globally.
 
 ---
 
-### Data Preparation
+## Data Preparation
 
 #### Installing Packages {#installing-packages}
 
 ```{r install and load packages, echo=TRUE, message=FALSE, warning=FALSE}
-# List of packages to install and load
+# Packages to install and load
 packages <- c("tidyverse", "ggplot2", "tidyr", "dplyr", "plotly", "rnaturalearth", "rnaturalearthdata", "sf", "htmlwidgets")
 
 # Function to install packages and load them
@@ -98,32 +95,30 @@ install_and_load <- function(packages) {
   }
 }
 
-# Run the function
+# Run function
 install_and_load(packages)
 ```
 
 ---
 
-### Load Data {#load-data}
+#### Loading Data {#load-data}
 
-```{r load the data, echo=TRUE, message=FALSE, warning=FALSE}
-# Load raw data / replace "data/smoking.csv" with the path to your CVS file. 
+```{r load data, echo=TRUE, message=FALSE, warning=FALSE}
+# Load raw data / replace "data/smoking.csv" with the path to CVS file. 
 rawdata <- read.csv("data/smoking.csv")
 ```
 
 ---
 
-### Sanity Check {#sanity-check}
-
-Summary and structure of the dataset before cleaning.
+#### Sanity Check {#sanity-check}
 
 ```{r sanity check, echo=TRUE, results="hide", message=FALSE, warning=FALSE}
 #sanity check 
-str(rawdata)           # Inspect structure and summary
+str(rawdata)           # structure and summary
 summary(rawdata)
-head(rawdata)          # Check the first few rows
+head(rawdata)          # Check first rows
 dim(rawdata)           # Check dimensions
-colSums(is.na(rawdata))# Check for missing values
+colSums(is.na(rawdata))# Check missing values
 
 # Check for duplicates
 duplicates <- rawdata[duplicated(rawdata), ]
@@ -135,12 +130,12 @@ unique(rawdata$Year)
 ```
 ---
 
-### Clean Data {#clean-data}
+#### Cleaning Data {#clean-data}
 
 The dataset initially included various entities, such as global regions and income levels. To focus on country-level analysis, these entities were excluded. Additionally, the data was streamlined to 5-year intervals for clarity, which involved removing the years 2018 and 2019. For simplicity and readability, the variable representing prevalence was also renamed.
 
 ```{r cleaning data, echo=TRUE, message=FALSE, warning=FALSE}
-# Cleaning the data 
+# Cleaning data 
 # Remove specific entities
 countries_data <- rawdata[!rawdata$Entity %in% c("East Asia and Pacific (WB)", "Sub-Saharan Africa (WB)", 
                                                  "Upper-middle-income countries", "Europe and Central Asia (WB)", 
@@ -153,13 +148,13 @@ countries_data <- rawdata[!rawdata$Entity %in% c("East Asia and Pacific (WB)", "
 countries_data <- countries_data %>%
   filter(!(Year %in% c(2018, 2019)))
 
-# Rename column for ease of use
+# Rename column for ease
 countries_data <- countries_data %>%
   rename(Prevalence = Prevalence.of.current.tobacco.use....of.adults.)
 
 ```
 
-# Loading and cleaning world data in order to merge with smoke data
+#### Load and Clean to merge {#load-and-Clean-to-merge}
 
 In this section, the world map data was loaded using the ne_countries() function, which provides a geospatial dataset containing geographic and country-level information. To ensure compatibility with the smoking data, discrepancies in ISO country codes between the world map dataset (world) and the smoking prevalence dataset (countries_data) were identified. Specifically, any codes present in countries_data but missing in world, and vice versa, were highlighted. To address these discrepancies the function fix_iso_codes() was created to correct mismatched ISO codes.
 
@@ -186,11 +181,11 @@ world <- fix_iso_codes(world)
 
 ---
 
-### Merge Data {#merge-data}
+#### Merge Data {#merge-data}
 
-To prepare the datasets for visualization, the world map data and the cleaned smoking prevalence data were merged using the left_join() function. The datasets were aligned by matching the ISO country codes (iso_a3 in the world dataset and Code in the smoking dataset). During this process, any missing prevalence values were replaced with 0 using the mutate() function, ensuring that all countries had defined values for visualization, even if data was unavailable. Duplicate entries were identified and removed to maintain data integrity.
+To prepare the datasets for visualisation, the world map data and the cleaned smoking prevalence data were merged using the left_join() function. The datasets were aligned by matching the ISO country codes (iso_a3 in the world dataset and Code in the smoking dataset). During this process, any missing prevalence values were replaced with 0 using the mutate() function, ensuring that all countries had defined values for visualisation, even if data was unavailable. Duplicate entries were identified and removed to maintain data integrity.
 
-To make the data compatible with interactive visualizations in Plotly, the geometric information in the sf object was removed using the st_set_geometry(NULL) function. A detailed inspection of the merged dataset was performed. Finally, distributions of data across years and countries were tabulated to confirm consistency and readiness for visualization. This step ensured a clean, structured dataset suitable for creating accurate and informative visualizations.
+To make the data compatible with interactive visualisations in Plotly, the geometric information in the sf object was removed using the st_set_geometry(NULL) function. A detailed inspection of the merged dataset was performed. Finally, distributions of data across years and countries were tabulated to confirm consistency and readiness for visualisation. This step ensured a clean, structured dataset suitable for creating accurate and informative visualisations.
 
 ```{r, echo=TRUE, results="hide", message=FALSE, warning=FALSE}
 # Merge datasets, sanity check/clean merged data 
@@ -209,11 +204,11 @@ map_data <- map_data[!duplicated(map_data), ]
 plot_data <- map_data %>%
   st_set_geometry(NULL)
 
-# Structure and summary of the cleaned dataset
+# Structure and summary of cleaned dataset
 str(plot_data)
 summary(plot_data)
 
-# Check for duplicates in country-year pairs
+# Check for duplicates country-year pairs
 duplicates <- plot_data %>%
   group_by(iso_a3, Year) %>%
   filter(n() > 1)
@@ -232,18 +227,19 @@ table(plot_data$iso_a3)
 
 ---
 
-### Description of Data {#description-of-data}
+## Description of Data {#description-of-data}
 
-The cleaned dataset consists of country-level information on smoking prevalence among adults from 2000 to 2020, focusing on 5-year intervals. Key variables include Entity, which represents the name of each country; Code, the unique ISO-3 country code used for data alignment; Year, indicating the specific year of observation; and Prevalence, which provides the percentage of the adult population currently using tobacco products. The data has been meticulously cleaned to exclude regional or global aggregates and irrelevant entities, ensuring it accurately reflects country-level trends. Furthermore, missing values in prevalence have been accounted for, and duplicate entries removed, resulting in a comprehensive and structured dataset ideal for visualizing smoking trends over time.
+The cleaned dataset consists of country-level information on smoking prevalence among adults from 2000 to 2020, focusing on 5-year intervals. Key variables include Entity, which represents the name of each country; Code, the unique ISO-3 country code used for data alignment; Year, indicating the specific year of observation; and Prevalence, which provides the percentage of the adult population currently using tobacco products. The data has been cleaned to exclude irrelevant entities, ensuring it accurately reflects country-level trends. Furthermore, missing values in prevalence have been accounted for, and duplicate entries removed, resulting in a comprehensive and structured dataset ideal for visualising smoking trends over time.
 
 ---
 
-### Initial Visualisations {#initial-visualisations}
+## Initial Visualisations {#initial-visualisations}
 
-### Fisrt visualisation
-The initial visualization provided a basic representation of smoking prevalence on a static map. While it successfully displayed the prevalence rates for countries, it lacked interactivity and failed to account for changes across years. Users could not explore how smoking prevalence evolved over time or access specific data points for each country. The map presented a single snapshot without the ability to delve into detailed information, such as individual country names or exact prevalence percentages. These limitations highlighted the need for a more dynamic and informative visualization to enhance user engagement and understanding.
+### First visualisation
+The initial visualisation provided a basic representation of smoking prevalence on a static map. While it successfully displayed the prevalence rates for countries, it lacked interactivity and failed to account for changes across years. Users could not explore how smoking prevalence evolved over time or access specific data points for each country. The map presented a single snapshot without the ability to delve into detailed information, such as individual country names or exact prevalence percentages. These limitations highlighted the need for a more dynamic and informative visualisation to enhance user engagement and understanding.
 
 ```{r, echo=TRUE, results="hide", message=FALSE, warning=FALSE}
+# first visualisation
 ggplot(data = map_data) +
   geom_sf(aes(fill = Prevalence), color = "white", size = 0.2) +
   scale_fill_gradient(low = "blue", high = "red", na.value = "grey") +
@@ -253,22 +249,23 @@ ggplot(data = map_data) +
 
 ```
 
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+#Save to file
+ggsave("plots/initial_visualisation.png", width = 10, height = 6, dpi = 300)
+```
+
 ---
 
-### Second visualization 
+### Second visualisation 
 
-My next visualization aimed to be more interactive. 
-This time, I managed to get individual interactive visualizations for each year. However, this did not allow us to visualize the evolution across time in a single plot. 
+My next visualisation aimed to be more interactive. 
+This time, I managed to get individual interactive visualisations for each year. However, this did not allow us to visualise the evolution across time in a single plot.
 
 ```{r, echo=TRUE, results="hide", message=FALSE, warning=FALSE}
 # Function to create an interactive plot for a specific year
 
 # Create a list of subsets by year
 yearly_subcategories <- split(plot_data, plot_data$Year)
-
-
-# Combine all yearly subcategories back into a single dataset
-combined_data_year <- bind_rows(yearly_subcategories)
 
 create_interactive_year_plot <- function(data, year) {
   plot <- ggplot(data = data %>% filter(Year == year)) +
@@ -293,7 +290,7 @@ create_interactive_year_plot <- function(data, year) {
   ggplotly(plot, tooltip = c("text"))
 }
 
-# Create interactive visualizations for each year
+# Create interactive visualisations for each year
 interactive_plot_2000 <- create_interactive_year_plot(map_data, 2000)
 interactive_plot_2005 <- create_interactive_year_plot(map_data, 2005)
 interactive_plot_2010 <- create_interactive_year_plot(map_data, 2010)
@@ -302,40 +299,66 @@ interactive_plot_2020 <- create_interactive_year_plot(map_data, 2020)
 
 ```
 
-## second visualization {.tabset}
+## second visualisation {.tabset}
 ### 2000
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#Show plot 2000
 interactive_plot_2000 <- create_interactive_year_plot(map_data, 2000)
 interactive_plot_2000
 ```
 ### 2005
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#Show plot 2005
 interactive_plot_2005 <- create_interactive_year_plot(map_data, 2005)
 interactive_plot_2005
 ```
 ### 2010
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#Show plot 2010
 interactive_plot_2010 <- create_interactive_year_plot(map_data, 2010)
 interactive_plot_2010
 ```
 ### 2015
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#Show plot 2015
 interactive_plot_2015 <- create_interactive_year_plot(map_data, 2015)
 interactive_plot_2015
 ```
 ### 2020
 ```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#Show plot 2020
 interactive_plot_2020 <- create_interactive_year_plot(map_data, 2020)
 interactive_plot_2020
 ```
 
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Save yearly interactive plots
+years <- c(2000, 2005, 2010, 2015, 2020)
+plots <- list(interactive_plot_2000, interactive_plot_2005, interactive_plot_2010, interactive_plot_2015, interactive_plot_2020)
+
+for (i in seq_along(years)) {
+  htmlwidgets::saveWidget(plots[[i]], paste0("plots/interactive_plot_", years[i], ".html"))
+}
+
+```
 
 
 ## Final Visualisation {#final-visualisation}
 
+To create my final visualisation, I combined the previous data sets of the individual years into one single data set. 
+
+For the final visualisation, I needed to merge the individual datasets for each year back into a single dataset. 
+Initially, I used the data set countries_data to create my visualisation, however it resulted in unexpected behaviour when combined with the plotly package. Seperating and combining the datasets allowed me to correct the visualisation. 
+Additionally, I added a new colour scheme with adjusted thresholds to better differentiate smoking prevalence rates across countries. This approach improved clarity and enhanced the visual impact of the data. I also incorporated all years into a unified visualisation of all years, which allows us to observe trends over time seamlessly. 
+Finally, I added descriptive titles and annotations to provide context and guide interpretation, making the visualisation more informative.
+
 ```{r}
-# Enhanced plot with light yellow to dark red gradient and updated hover text
-enhanced_plot <- plot_ly(
+
+# Combine all yearly subcategories back into a single dataset
+combined_data_year <- bind_rows(yearly_subcategories)
+
+# Enhanced plot
+final_plot <- plot_ly(
   data = combined_data_year,
   type = "choropleth",
   locations = ~iso_a3,
@@ -344,7 +367,7 @@ enhanced_plot <- plot_ly(
   frame = ~Year,
   text = ~ifelse(
     is.na(Prevalence),
-    NA,  # No hover text for missing values
+    NA,  
     paste("Country:", Entity, "<br>Prevalence:", Prevalence, "%")  # Show prevalence for available data
   ),
   hoverinfo = "text",  # Show only custom hover text
@@ -357,7 +380,7 @@ enhanced_plot <- plot_ly(
     list(1, "#67000d")    # Dark red for high prevalence
   ),
   zmin = 0,
-  zmax = 70,  # Adjusted max prevalence for better differentiation
+  zmax = 70,  # Adjusted prevalence
   showscale = TRUE,
   marker = list(line = list(color = "grey", width = 0.5))  # Border for countries
 ) %>%
@@ -367,9 +390,9 @@ enhanced_plot <- plot_ly(
       projection = list(type = "equirectangular"),  # Rectangular projection
       showcoastlines = TRUE,
       coastlinecolor = "grey",                     # Coastline color
-      showcountries = TRUE,                        # Show country borders
+      showcountries = TRUE,                        # country borders
       countrycolor = "grey",                       # Country border color
-      showland = TRUE,                             # Highlight land areas
+      showland = TRUE,                             # Highlight land 
       landcolor = "white",                         # Land color
       showocean = TRUE,                            # Highlight oceans
       oceancolor = "lightblue",                    # Ocean color
@@ -378,31 +401,43 @@ enhanced_plot <- plot_ly(
     annotations = list(
       # Note annotation
       list(
-        x = 0.5,                                   # Horizontal position
-        y = -0.1,                                  # Vertical position (below the map)
-        xref = "paper",                            # Relative to paper's x-axis
-        yref = "paper",                            # Relative to paper's y-axis
-        text = "Note: White regions indicate missing data.", # Annotation text
+        x = 0.5,                                   # Horizontal 
+        y = -0.1,                                  # Vertical  (below the map)
+        xref = "paper",                            # x-axis
+        yref = "paper",                            # y-axis
+        text = "Note: White regions indicate missing data.", # Annotation 
         showarrow = FALSE,                         # No arrow
-        font = list(size = 12, color = "black"),   # Font styling
+        font = list(size = 12, color = "black"),   # Font 
         align = "left"
       ),
       # Source annotation
       list(
-        x = 0.5,                                   # Horizontal position
-        y = -0.15,                                 # Vertical position (below the map)
-        xref = "paper",                            # Relative to paper's x-axis
-        yref = "paper",                            # Relative to paper's y-axis
+        x = 0.5,                                   # Horizontal 
+        y = -0.15,                                 # Vertical (below the map)
+        xref = "paper",                            # x-axis
+        yref = "paper",                            # y-axis
         text = "Source: Multiple sources compiled by World Bank (2024) – processed by Our World In Data",
         showarrow = FALSE,                         # No arrow
-        font = list(size = 10, color = "black"),   # Font styling
+        font = list(size = 10, color = "black"),   # Font
         align = "center"
       )
     )
   )
 
-# Display the enhanced plot
-enhanced_plot
+# Show  plot
+final_plot 
 
 ```
 
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+#Save plot
+htmlwidgets::saveWidget(final_plot, "plots/final_visualisation.html")
+
+```
+
+
+# References {#rerferences}
+
+Data : 
+Multiple sources compiled by World Bank (2024) – processed by Our World in Data. “Prevalence of current tobacco use (% of adults)” [dataset]. World Health Organization (via World Bank), “World Development Indicators” [original data]. Retrieved December 9, 2024 from https://ourworldindata.org/grapher/share-of-adults-who-smoke
