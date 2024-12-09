@@ -243,7 +243,7 @@ The cleaned dataset consists of country-level information on smoking prevalence 
 ### Fisrt visualisation
 The initial visualization provided a basic representation of smoking prevalence on a static map. While it successfully displayed the prevalence rates for countries, it lacked interactivity and failed to account for changes across years. Users could not explore how smoking prevalence evolved over time or access specific data points for each country. The map presented a single snapshot without the ability to delve into detailed information, such as individual country names or exact prevalence percentages. These limitations highlighted the need for a more dynamic and informative visualization to enhance user engagement and understanding.
 
-```{r}
+```{r, echo=TRUE, results="hide", message=FALSE, warning=FALSE}
 ggplot(data = map_data) +
   geom_sf(aes(fill = Prevalence), color = "white", size = 0.2) +
   scale_fill_gradient(low = "blue", high = "red", na.value = "grey") +
@@ -260,7 +260,7 @@ ggplot(data = map_data) +
 My next visualization aimed to be more interactive. 
 This time, I managed to get individual interactive visualizations for each year. However, this did not allow us to visualize the evolution across time in a single plot. 
 
-```{r}
+```{r, echo=TRUE, results="hide", message=FALSE, warning=FALSE}
 # Function to create an interactive plot for a specific year
 
 # Create a list of subsets by year
@@ -293,24 +293,45 @@ create_interactive_year_plot <- function(data, year) {
   ggplotly(plot, tooltip = c("text"))
 }
 
-# Create interactive visualisations for each year
+# Create interactive visualizations for each year
 interactive_plot_2000 <- create_interactive_year_plot(map_data, 2000)
 interactive_plot_2005 <- create_interactive_year_plot(map_data, 2005)
 interactive_plot_2010 <- create_interactive_year_plot(map_data, 2010)
 interactive_plot_2015 <- create_interactive_year_plot(map_data, 2015)
 interactive_plot_2020 <- create_interactive_year_plot(map_data, 2020)
 
-# Display the interactive plots
+```
+
+## second visualization {.tabset}
+### 2000
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+interactive_plot_2000 <- create_interactive_year_plot(map_data, 2000)
 interactive_plot_2000
+```
+### 2005
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+interactive_plot_2005 <- create_interactive_year_plot(map_data, 2005)
 interactive_plot_2005
+```
+### 2010
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+interactive_plot_2010 <- create_interactive_year_plot(map_data, 2010)
 interactive_plot_2010
+```
+### 2015
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+interactive_plot_2015 <- create_interactive_year_plot(map_data, 2015)
 interactive_plot_2015
+```
+### 2020
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+interactive_plot_2020 <- create_interactive_year_plot(map_data, 2020)
 interactive_plot_2020
 ```
 
 
-### Final Visualisation {#final-visualisation}
-## Final visualization 
+
+## Final Visualisation {#final-visualisation}
 
 ```{r}
 # Enhanced plot with light yellow to dark red gradient and updated hover text
