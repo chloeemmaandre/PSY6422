@@ -1,5 +1,5 @@
 ---
-title: "PSY6422 Global Smoking Prevalence Analysis"
+title: "PSY6422 Global Smoking Prevalence Analysis (2000-2020)"
 date: "2024-12-06"
 output: html_document
 flexdashboard::flex_dashboard:
@@ -33,9 +33,7 @@ Column {data-width=750}
 -----------------------------------------------------------------------
 ### Background Information {#background-information}
 
-explain why I chose smoking data and maybe where my data comes from??
-This data package contains the data that powers the chart ["Share of adults who smoke"](https://ourworldindata.org/grapher/share-of-adults-who-smoke?v=1&csvType=full&useColumnShortNames=false) on the Our World in Data website
-https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators  
+Smoking is one of the leading causes of preventable deaths globally, contributing significantly to a wide range of health problems, including cardiovascular diseases, respiratory conditions, and various cancers. Over the years, many countries have implemented measures to reduce smoking prevalence, such as public health campaigns, tobacco taxes, smoking bans in public areas, and regulations on tobacco advertising. Despite these efforts, smoking continues to affect millions of people worldwide, with its prevalence varying significantly across regions and populations. By investigating the prevalence of smoking among adults globally from 2000 to 2020, this study aims to explore and identify patterns or disparities in smoking behaviours. Understanding these trends is crucial for informing future public health strategies and reducing the global burden of tobacco-related diseases.
 
 ---
 
@@ -65,6 +63,9 @@ The PSY6422_smoke repository is organized into key sections to help you navigate
 The raw dataset for this visualization project comes from : Multiple sources compiled by World Bank (2024) – processed by Our World in Data. “Prevalence of current tobacco use (% of adults)” [dataset]. World Health Organization (via World Bank), “World Development Indicators” [original data].
 Source: Multiple sources compiled by World Bank (2024) – processed by Our World In Data
 
+This data package contains the data that powers the chart ["Share of adults who smoke"](https://ourworldindata.org/grapher/share-of-adults-who-smoke?v=1&csvType=full&useColumnShortNames=false) on the Our World in Data website
+https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators
+
 The percentage of the population ages 15 years and over who currently use any tobacco product (smoked and/or smokeless tobacco) on a daily or non-daily basis. Tobacco products include cigarettes, pipes, cigars, cigarillos, waterpipes (hookah, shisha), bidis, kretek, heated tobacco products, and all forms of smokeless (oral and nasal) tobacco. Tobacco products exclude e-cigarettes (which do not contain tobacco), “e-cigars”, “e-hookahs”, JUUL and “e-pipes”. The rates are age-standardized to the WHO Standard Population.
 
 #### Limitations {#limitations}
@@ -81,7 +82,7 @@ Estimates for countries with irregular surveys or many data gaps have large unce
 
 #### Installing Packages {#installing-packages}
 
-```{r install and load packages}
+```{r install and load packages, echo=TRUE, include=FALSE}
 # List of packages to install and load
 packages <- c("tidyverse", "ggplot2", "tidyr", "dplyr", "plotly", "rnaturalearth", "rnaturalearthdata", "sf", "htmlwidgets")
 
@@ -112,7 +113,7 @@ install_and_load(packages)
 
 Code to load the dataset and a brief description of the file used.
 
-```{r load the data}
+```{r load the data, echo=TRUE, include=FALSE}
 # Load raw data
 rawdata <- read.csv("data/smoking.csv")
 ```
@@ -123,7 +124,7 @@ rawdata <- read.csv("data/smoking.csv")
 
 Summary and structure of the dataset before cleaning.
 
-```{r sanity check}
+```{r sanity check, echo=TRUE, include=FALSE}
 #sanity check 
 str(rawdata)           # Inspect structure and summary
 summary(rawdata)
@@ -144,7 +145,7 @@ unique(rawdata$Year)
 ### Clean Data {#clean-data}
 
 Steps and code for cleaning the data.
-```{r cleaning data}
+```{r cleaning data, echo=TRUE, include=FALSE}
 # Cleaning the data 
 # Remove specific entities
 countries_data <- rawdata[!rawdata$Entity %in% c("East Asia and Pacific (WB)", "Sub-Saharan Africa (WB)", 
@@ -165,7 +166,7 @@ countries_data <- countries_data %>%
 ```
 
 # Loading and cleaning world data in order to merge with smoke data
-```{r}
+```{r, echo=TRUE, include=FALSE}
 # Load world map data
 world <- ne_countries(scale = "medium", returnclass = "sf")
 
@@ -191,7 +192,7 @@ world <- fix_iso_codes(world)
 ### Merge Data {#merge-data}
 
 Explanation and code for merging the datasets.
-```{r}
+```{r, echo=TRUE, include=FALSE}
 # Merge datasets, sanity check/clean merged data 
 # Merge datasets
 map_data <- world %>%
