@@ -1,37 +1,86 @@
 ---
-title: "PSY6422_smoke"
+title: "PSY6422 Global Smoking Prevalence Analysis"
 date: "2024-12-06"
 output: html_document
+flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: scroll
 ---
 
-## Background information
+Column {data-width=250}
+-----------------------------------------------------------------------
+
+### Navigation
+
+- [Background Information](#background-information)
+- [Research Question](#research-question)
+- [Project Organisation](#project-organisation)
+- Dataset
+  - [Dataset Origins](#dataset-origins)
+  - [Limitations](#limitations)
+- Data Preparation
+  - [Installing Packages](#installing-packages)
+  - [Libraries](#libraries)
+  - [Load Data](#load-data)
+  - [Sanity Check](#sanity-check)
+  - [Clean Data](#clean-data)
+  - [Merge Data](#merge-data)
+  - [Description of Data](#description-of-data)
+- [Initial Visualization](#initial-visualisation)
+- [Final Visualization](#final-visualisation)
+
+Column {data-width=750}
+-----------------------------------------------------------------------
+### Background Information {#background-information}
 
 explain why I chose smoking data and maybe where my data comes from??
 This data package contains the data that powers the chart ["Share of adults who smoke"](https://ourworldindata.org/grapher/share-of-adults-who-smoke?v=1&csvType=full&useColumnShortNames=false) on the Our World in Data website
 https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators  
 
-## Research question 
+---
+
+### Research Question {#research-question}
 
 How does the prevalence of smoking in adults across the world vary in the dataset, and what trends or patterns emerge from this analysis? 
 
-## Project Organization 
+---
+
+### Project Organisation {#project-organisation}
+
+The project repository includes:
+- **Codebook:** Detailed variable descriptions.
+- **Data Folder:** Contains the raw and processed datasets.
+- **Figures Folder:** Visualizations created during analysis.
+- **Scripts Folder:** R scripts for cleaning, analysis, and plotting.
+
+
 The PSY6422_smoke repository is organized into key sections to help you navigate its contents. The /codebook folder provides detailed documentation on the dataset, including variable descriptions and structure, offering essential context for the analysis. The /data folder contains the raw datasets used in this project, forming the basis of all analyses. The /figures folder showcases visualizations and plots created during the analysis, highlighting the project’s key findings and insights. Lastly, the /scripts folder includes all the code used for data processing, analysis, and visualization. Together, these sections guide you through the project workflow, from raw data to final outputs.
 
+---
 
-## Data set 
-# data set origirs 
+### Dataset
+
+#### Dataset Origins {#dataset-origins}
+
 The raw dataset for this visualization project comes from : Multiple sources compiled by World Bank (2024) – processed by Our World in Data. “Prevalence of current tobacco use (% of adults)” [dataset]. World Health Organization (via World Bank), “World Development Indicators” [original data].
 Source: Multiple sources compiled by World Bank (2024) – processed by Our World In Data
 
 The percentage of the population ages 15 years and over who currently use any tobacco product (smoked and/or smokeless tobacco) on a daily or non-daily basis. Tobacco products include cigarettes, pipes, cigars, cigarillos, waterpipes (hookah, shisha), bidis, kretek, heated tobacco products, and all forms of smokeless (oral and nasal) tobacco. Tobacco products exclude e-cigarettes (which do not contain tobacco), “e-cigars”, “e-hookahs”, JUUL and “e-pipes”. The rates are age-standardized to the WHO Standard Population.
 
+#### Limitations {#limitations}
 
-# limitations
+- Large uncertainty in countries with irregular surveys or missing data.
+- Estimates exclude e-cigarettes and other non-tobacco products.
+
 These considerations are important when interpreting the project's results 
 Estimates for countries with irregular surveys or many data gaps have large uncertainty ranges, and such results should be interpreted with caution.
 
-## Data preparation 
-# install and load packages
+---
+
+### Data Preparation
+
+#### Installing Packages {#installing-packages}
+
 ```{r install and load packages}
 # List of packages to install and load
 packages <- c("tidyverse", "ggplot2", "tidyr", "dplyr", "plotly", "rnaturalearth", "rnaturalearthdata", "sf", "htmlwidgets")
@@ -51,16 +100,29 @@ install_and_load <- function(packages) {
 # Run the function
 install_and_load(packages)
 ```
-```
+``` 
 
-# Load data 
+---
+
+### Libraries {#libraries} 
+
+---
+
+### Load Data {#load-data}
+
+Code to load the dataset and a brief description of the file used.
 
 ```{r load the data}
 # Load raw data
 rawdata <- read.csv("data/smoking.csv")
 ```
 
-# Sanity check 
+---
+
+### Sanity Check {#sanity-check}
+
+Summary and structure of the dataset before cleaning.
+
 ```{r sanity check}
 #sanity check 
 str(rawdata)           # Inspect structure and summary
@@ -77,9 +139,11 @@ print(duplicates)
 unique(rawdata$Entity)
 unique(rawdata$Year)
 ```
+---
 
+### Clean Data {#clean-data}
 
-# Cleaning data 
+Steps and code for cleaning the data.
 ```{r cleaning data}
 # Cleaning the data 
 # Remove specific entities
@@ -122,7 +186,11 @@ fix_iso_codes <- function(world_data) {
 world <- fix_iso_codes(world)
 ```
 
-# Merging data, sanity check and cleaning the merged data
+---
+
+### Merge Data {#merge-data}
+
+Explanation and code for merging the datasets.
 ```{r}
 # Merge datasets, sanity check/clean merged data 
 # Merge datasets
@@ -161,6 +229,11 @@ table(plot_data$iso_a3)
 
 ```
 
+---
+
+### Description of Data {#description-of-data}
+
+Summary of the cleaned data, including key variables.
 
 # creating variables 
 
@@ -180,8 +253,13 @@ I also renamed the variable prevalence for ease.and fixed my missing isos
 # description of the cleaned data 
 Entity refers to the name of the country. Code refers to the OWID internal entity code that we use if the entity is a country or region. Year refers to the years of the prevalence. Prevalence.of.current.tobacco.use....of.adults. refers to the prevalence of current tobacco users. 
 
+---
 
-## Initial visualization
+### Initial Visualisation {#initial-visualisation}
+
+Code and output for the initial visualisation.
+
+### Visualization {#visualization}
 This is the very first visualization I got for my data. 
 The initial visualization provided a basic representation of smoking prevalence on a static map. While it successfully displayed the prevalence rates for countries, it lacked interactivity and failed to account for changes across years. Users could not explore how smoking prevalence evolved over time or access specific data points for each country. The map presented a single snapshot without the ability to delve into detailed information, such as individual country names or exact prevalence percentages. These limitations highlighted the need for a more dynamic and informative visualization to enhance user engagement and understanding.
 
@@ -195,6 +273,9 @@ ggplot(data = map_data) +
 
 ```
 
+---
+
+### Final Visualisation {#final-visualisation}
 ## Final visualization 
 
 
