@@ -25,7 +25,7 @@ Column {data-width=300}
   - [Clean Data](#clean-data)
   - [Merge Data](#merge-data)
   - [Description of Data](#description-of-data)
-- [Initial Visualization](#initial-visualisation)
+- [Initial Visualizations](#initial-visualisations)
 - [Final Visualization](#final-visualisation)
 
 Column {data-width=700}
@@ -238,8 +238,9 @@ The cleaned dataset consists of country-level information on smoking prevalence 
 
 ---
 
-### Initial Visualisation {#initial-visualisation}
+### Initial Visualisations {#initial-visualisations}
 
+### Fisrt visualisation
 The initial visualization provided a basic representation of smoking prevalence on a static map. While it successfully displayed the prevalence rates for countries, it lacked interactivity and failed to account for changes across years. Users could not explore how smoking prevalence evolved over time or access specific data points for each country. The map presented a single snapshot without the ability to delve into detailed information, such as individual country names or exact prevalence percentages. These limitations highlighted the need for a more dynamic and informative visualization to enhance user engagement and understanding.
 
 ```{r}
@@ -254,7 +255,133 @@ ggplot(data = map_data) +
 
 ---
 
+### Second visualization 
+
+My next visualization aimed to be more interactive. 
+This time, I managed to get individual interactive visualizations for each year. However, this did not allow us to visualize the evolution across time in a single plot. 
+
+```{r}
+# Function to create an interactive plot for a specific year
+
+# Create a list of subsets by year
+yearly_subcategories <- split(plot_data, plot_data$Year)
+
+
+# Combine all yearly subcategories back into a single dataset
+combined_data_year <- bind_rows(yearly_subcategories)
+
+create_interactive_year_plot <- function(data, year) {
+  plot <- ggplot(data = data %>% filter(Year == year)) +
+    geom_sf(aes(fill = Prevalence, text = paste("Country:", Entity, "<br>Prevalence:", Prevalence, "%")),
+            size = 0.2) +  # Removed black borders
+    scale_fill_gradient(low = "lightyellow", high = "darkred", na.value = "white", name = "Prevalence (%)") +
+    labs(
+      title = paste("Global Smoking Prevalence -", year),
+      fill = "Prevalence (%)"
+    ) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(hjust = 0.5, size = 16),
+      legend.position = "bottom",
+      axis.title = element_blank(),
+      axis.text = element_blank(),
+      axis.ticks = element_blank(),
+      panel.grid = element_blank()
+    )
+  
+  # Convert ggplot to interactive plotly object with hover text
+  ggplotly(plot, tooltip = c("text"))
+}
+
+# Create interactive visualisations for each year
+interactive_plot_2000 <- create_interactive_year_plot(map_data, 2000)
+interactive_plot_2005 <- create_interactive_year_plot(map_data, 2005)
+interactive_plot_2010 <- create_interactive_year_plot(map_data, 2010)
+interactive_plot_2015 <- create_interactive_year_plot(map_data, 2015)
+interactive_plot_2020 <- create_interactive_year_plot(map_data, 2020)
+
+# Display the interactive plots
+interactive_plot_2000
+interactive_plot_2005
+interactive_plot_2010
+interactive_plot_2015
+interactive_plot_2020
+```
+
+
 ### Final Visualisation {#final-visualisation}
 ## Final visualization 
 
+```{r}
+# Enhanced plot with light yellow to dark red gradient and updated hover text
+enhanced_plot <- plot_ly(
+  data = combined_data_year,
+  type = "choropleth",
+  locations = ~iso_a3,
+  locationmode = "ISO-3",
+  z = ~Prevalence,
+  frame = ~Year,
+  text = ~ifelse(
+    is.na(Prevalence),
+    NA,  # No hover text for missing values
+    paste("Country:", Entity, "<br>Prevalence:", Prevalence, "%")  # Show prevalence for available data
+  ),
+  hoverinfo = "text",  # Show only custom hover text
+  colorscale = list(
+    list(0, "#ffeda0"),   # Light yellow for low prevalence
+    list(0.2, "#feb24c"), # Light orange
+    list(0.4, "#fd8d3c"), # Orange
+    list(0.6, "#fc4e2a"), # Reddish-orange
+    list(0.8, "#e31a1c"), # Red
+    list(1, "#67000d")    # Dark red for high prevalence
+  ),
+  zmin = 0,
+  zmax = 70,  # Adjusted max prevalence for better differentiation
+  showscale = TRUE,
+  marker = list(line = list(color = "grey", width = 0.5))  # Border for countries
+) %>%
+  layout(
+    title = "Global Smoking Prevalence in Adults (2000-2020)",
+    geo = list(
+      projection = list(type = "equirectangular"),  # Rectangular projection
+      showcoastlines = TRUE,
+      coastlinecolor = "grey",                     # Coastline color
+      showcountries = TRUE,                        # Show country borders
+      countrycolor = "grey",                       # Country border color
+      showland = TRUE,                             # Highlight land areas
+      landcolor = "white",                         # Land color
+      showocean = TRUE,                            # Highlight oceans
+      oceancolor = "lightblue",                    # Ocean color
+      showframe = FALSE                            # Remove map frame
+    ),
+    annotations = list(
+      # Note annotation
+      list(
+        x = 0.5,                                   # Horizontal position
+        y = -0.1,                                  # Vertical position (below the map)
+        xref = "paper",                            # Relative to paper's x-axis
+        yref = "paper",                            # Relative to paper's y-axis
+        text = "Note: White regions indicate missing data.", # Annotation text
+        showarrow = FALSE,                         # No arrow
+        font = list(size = 12, color = "black"),   # Font styling
+        align = "left"
+      ),
+      # Source annotation
+      list(
+        x = 0.5,                                   # Horizontal position
+        y = -0.15,                                 # Vertical position (below the map)
+        xref = "paper",                            # Relative to paper's x-axis
+        yref = "paper",                            # Relative to paper's y-axis
+        text = "Source: Multiple sources compiled by World Bank (2024) – processed by Our World In Data",
+        showarrow = FALSE,                         # No arrow
+        font = list(size = 10, color = "black"),   # Font styling
+        align = "center"
+      )
+    )
+  )
+
+# Display the enhanced plot
+enhanced_plot
+
+```
 
