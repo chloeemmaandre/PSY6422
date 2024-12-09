@@ -39,7 +39,7 @@ flexdashboard::flex_dashboard:
 
 ## Background Information {#background-information}
 
-Smoking is one of the leading causes of preventable deaths globally, contributing significantly to a wide range of health problems, including cardiovascular diseases, respiratory conditions, and various cancers. Over the years, many countries have implemented measures to reduce smoking prevalence, such as public health campaigns, tobacco taxes, smoking bans and regulations on tobacco advertising. Despite these efforts, smoking continues to affect millions of people worldwide, with its prevalence varying significantly across regions and populations. By investigating the prevalence of smoking among adults globally from 2000 to 2020, this study aims to explore and identify patterns or disparities in smoking behaviours. Understanding these trends is crucial for informing future public health strategies and reducing the global burden of tobacco-related diseases.
+Smoking is one of the leading causes of deaths globally, contributing significantly to a wide range of health problems, including cardiovascular diseases, respiratory conditions, and various cancers. Over the years, many countries have implemented measures to reduce smoking prevalence, such as public health campaigns, tobacco taxes, smoking bans and regulations on tobacco advertising. Despite these efforts, smoking continues to affect people worldwide, with its prevalence varying significantly across regions and populations. By investigating the prevalence of smoking among adults globally from 2000 to 2020, this study aims to explore and identify patterns in smoking behaviours.
 
 ---
 
@@ -63,15 +63,16 @@ The **Scripts Folder** contains the code used for data processing, analysis, and
 
 #### Dataset Origins {#dataset-origins}
 
-The raw dataset for this visualisation project comes from Multiple sources compiled by World Bank (2024) – processed by Our World In Data. “Prevalence of current tobacco use (% of adults)” [dataset]
+The raw dataset for this visualisation project comes from Multiple sources compiled by World Bank (2024) – processed by Our World In Data. “Prevalence of current tobacco use (% of adults)”
 
-This data represents the percentage of the population ages 15 years and over who currently use any tobacco product (smoked and/or smokeless tobacco) on a daily or non-daily basis. Tobacco products include cigarettes, pipes, cigars, cigarillos, waterpipes, bidis, kretek, heated tobacco products, and all forms of smokeless (oral and nasal) tobacco. 
-Tobacco products exclude e-cigarettes (which do not contain tobacco), “e-cigars”, “e-hookahs”, JUUL and “e-pipes”. 
+This data represents the percentage of the population ages 15 years and over who currently use any tobacco product (smoked and/or smokeless tobacco) on a daily or non-daily basis. 
+Tobacco products include cigarettes, pipes, cigars, cigarillos, waterpipes, bidis, kretek, heated tobacco products, and all forms of smokeless (oral and nasal) tobacco. 
+Tobacco products do not e-cigarettes (which do not contain tobacco), “e-cigars”, “e-hookahs”, JUUL and “e-pipes”. 
 The rates are age-standardized to the WHO Standard Population.
 
 #### Limitations {#limitations}
 
-When interpreting the project's results, it is important to consider the limitations of the dataset. Countries with irregular surveys or significant gaps in data contribute to large uncertainties in the estimates, making these results less reliable. Additionally, the dataset excludes information on e-cigarettes and other non-tobacco products, focusing solely on traditional tobacco use. These limitations mean that the findings should be interpreted with caution, particularly for countries with incomplete or inconsistent data, as the trends and prevalence rates presented may not fully capture the complexity of smoking behaviours globally.
+Countries with irregular surveys or significant gaps in data contribute to large uncertainties in the estimates, making these results less reliable. Furthermore, the dataset excludes information on e-cigarettes and other non-tobacco products, focusing solely on traditional tobacco use. These limitations mean that the findings should be interpreted with caution, particularly for countries with incomplete or inconsistent data, as the trends and prevalence rates presented may not fully capture the complexity of smoking behaviours globally.
 
 ---
 
@@ -156,7 +157,8 @@ countries_data <- countries_data %>%
 
 #### Load and Clean to merge {#load-and-Clean-to-merge}
 
-In this section, the world map data was loaded using the ne_countries() function, which provides a geospatial dataset containing geographic and country-level information. To ensure compatibility with the smoking data, discrepancies in ISO country codes between the world map dataset (world) and the smoking prevalence dataset (countries_data) were identified. Specifically, any codes present in countries_data but missing in world, and vice versa, were highlighted. To address these discrepancies the function fix_iso_codes() was created to correct mismatched ISO codes.
+In this section, I loaded the world map data  using the ne_countries() function, which provides a geospatial dataset containing geographic and country-level information. To ensure compatibility with the smoking data, discrepancies in ISO country codes between the world map dataset (world) and the smoking prevalence dataset (countries_data) were identified. Specifically, any codes present in countries_data but missing in world, and vice versa. I created the function fix_iso_codes() to correct the mismatched iso codes.
+
 
 ```{r, echo=TRUE, results="hide" , message=FALSE, warning=FALSE}
 # Load world map data
@@ -183,9 +185,12 @@ world <- fix_iso_codes(world)
 
 #### Merge Data {#merge-data}
 
-To prepare the datasets for visualisation, the world map data and the cleaned smoking prevalence data were merged using the left_join() function. The datasets were aligned by matching the ISO country codes (iso_a3 in the world dataset and Code in the smoking dataset). During this process, any missing prevalence values were replaced with 0 using the mutate() function, ensuring that all countries had defined values for visualisation, even if data was unavailable. Duplicate entries were identified and removed to maintain data integrity.
-
-To make the data compatible with interactive visualisations in Plotly, the geometric information in the sf object was removed using the st_set_geometry(NULL) function. A detailed inspection of the merged dataset was performed. Finally, distributions of data across years and countries were tabulated to confirm consistency and readiness for visualisation. This step ensured a clean, structured dataset suitable for creating accurate and informative visualisations.
+To prepare the datasets for visualisation, I merged the world map data and the cleaned smoking prevalence data. 
+I aligned the datasets by matching ISO codes (iso_a3 in the world dataset and Code in the smoking dataset). 
+During this provess, all the missing prevalence values were replaced by 0, ensuring all the countries had defined values for visualisation, even if the data was not available. 
+To make the data compatible with the interactive visualisation in Plotly, I had to remove the geometric information.
+A detailed inspection of the merged dataset was performed. 
+Finally, distributions of data across years and countries were tabulated to confirm consistency for visualisation. This ensured a clean, structured dataset suitable for creating accurate and informative visualisations.
 
 ```{r, echo=TRUE, results="hide", message=FALSE, warning=FALSE}
 # Merge datasets, sanity check/clean merged data 
@@ -229,14 +234,16 @@ table(plot_data$iso_a3)
 
 ## Description of Data {#description-of-data}
 
-The cleaned dataset consists of country-level information on smoking prevalence among adults from 2000 to 2020, focusing on 5-year intervals. Key variables include Entity, which represents the name of each country; Code, the unique ISO-3 country code used for data alignment; Year, indicating the specific year of observation; and Prevalence, which provides the percentage of the adult population currently using tobacco products. The data has been cleaned to exclude irrelevant entities, ensuring it accurately reflects country-level trends. Furthermore, missing values in prevalence have been accounted for, and duplicate entries removed, resulting in a comprehensive and structured dataset ideal for visualising smoking trends over time.
+The cleaned dataset consists of country-level information on smoking prevalence among adults from 2000 to 2020, focusing on 5-year intervals. Key variables include Entity, which represents the name of each country; Code, the unique ISO-3 country code used for data alignment; Year, indicating the specific year of observation; and Prevalence, which provides the percentage of the adult population currently using tobacco products. The data has been cleaned to exclude irrelevant entities. Furthermore, missing values in prevalence have been accounted for, and duplicate entries removed, resulting in a comprehensive and structured dataset ideal for visualising smoking trends over time.
 
 ---
 
 ## Initial Visualisations {#initial-visualisations}
 
 ### First visualisation
-The initial visualisation provided a basic representation of smoking prevalence on a static map. While it successfully displayed the prevalence rates for countries, it lacked interactivity and failed to account for changes across years. Users could not explore how smoking prevalence evolved over time or access specific data points for each country. The map presented a single snapshot without the ability to delve into detailed information, such as individual country names or exact prevalence percentages. These limitations highlighted the need for a more dynamic and informative visualisation to enhance user engagement and understanding.
+The initial visualisation provided a basic representation of smoking prevalence on a static map. While it successfully displayed the prevalence rates for countries, it lacked interactivity and failed to account for changes across years. 
+This did not allow us to explore how smoking prevalence evolved over time or access specific data points for each country. The map presented a single snapshot without the ability to delve into detailed information, such as individual country names or exact prevalence percentages. 
+These limitations highlighted the need for a more dynamic and informative visualisation.
 
 ```{r, echo=TRUE, results="hide", message=FALSE, warning=FALSE}
 # first visualisation
@@ -435,6 +442,13 @@ final_plot
 htmlwidgets::saveWidget(final_plot, "plots/final_visualisation.html")
 
 ```
+
+# Final visualisation interpretation 
+
+This final visualisation allows us to see the evolution of the global smoking prevalence from 2000 to 2020. 
+We can clearly see that overall, the smoking prevalence is going down in the majority of countries.However, we can now compare the rates in different countries overtime. In some countries, the prevalence has drastically gone down over the years, in India the prevalence in 2000 was 54.4% compared to 27.2% in 2020. Other countries like France have not seen the prevalence go down as much (France had a prevalence of 34.2% in 2000 compared to 33.4% in 2020). 
+
+In the future, I would like to combine this data with data regarding the implemented measures to reduce smoking prevalence in the different countries, which could allow us to see the impact these measures have and potentially explain the different rates the prevalence changes across the world. 
 
 
 # References {#rerferences}

@@ -1,4 +1,4 @@
-# analysis 
+# Data visualisation code  
 
 # Packages to install and load
 packages <- c("tidyverse", "ggplot2", "tidyr", "dplyr", "plotly", "rnaturalearth", "rnaturalearthdata", "sf", "htmlwidgets")
