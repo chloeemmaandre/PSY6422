@@ -20,7 +20,6 @@ Column {data-width=300}
   - [Limitations](#limitations)
 - Data Preparation
   - [Installing Packages](#installing-packages)
-  - [Libraries](#libraries)
   - [Load Data](#load-data)
   - [Sanity Check](#sanity-check)
   - [Clean Data](#clean-data)
@@ -61,7 +60,7 @@ The PSY6422_smoke repository is organized into key sections to help you navigate
 
 #### Dataset Origins {#dataset-origins}
 
-The raw dataset for this visualization project comes from : Multiple sources compiled by World Bank (2024) – processed by Our World in Data. “Prevalence of current tobacco use (% of adults)” [dataset]. World Health Organization (via World Bank), “World Development Indicators” [original data].
+The raw dataset for this visualization project comes from Multiple sources compiled by World Bank (2024) – processed by Our World in Data. “Prevalence of current tobacco use (% of adults)” [dataset]. World Health Organization (via World Bank), “World Development Indicators” [original data].
 Source: Multiple sources compiled by World Bank (2024) – processed by Our World In Data
 
 This data package contains the data that powers the chart ["Share of adults who smoke"](https://ourworldindata.org/grapher/share-of-adults-who-smoke?v=1&csvType=full&useColumnShortNames=false) on the Our World in Data website
@@ -83,7 +82,7 @@ Estimates for countries with irregular surveys or many data gaps have large unce
 
 #### Installing Packages {#installing-packages}
 
-```{r install and load packages, echo=TRUE, include=FALSE}
+```{r install and load packages, echo=TRUE, message=FALSE, warning=FALSE}
 # List of packages to install and load
 packages <- c("tidyverse", "ggplot2", "tidyr", "dplyr", "plotly", "rnaturalearth", "rnaturalearthdata", "sf", "htmlwidgets")
 
@@ -102,20 +101,13 @@ install_and_load <- function(packages) {
 # Run the function
 install_and_load(packages)
 ```
-``` 
-
----
-
-### Libraries {#libraries} 
 
 ---
 
 ### Load Data {#load-data}
 
-Code to load the dataset and a brief description of the file used.
-
-```{r load the data, echo=TRUE, include=FALSE}
-# Load raw data
+```{r load the data, echo=TRUE, message=FALSE, warning=FALSE}
+# Load raw data / replace "data/smoking.csv" with the path to your CVS file. 
 rawdata <- read.csv("data/smoking.csv")
 ```
 
@@ -125,7 +117,7 @@ rawdata <- read.csv("data/smoking.csv")
 
 Summary and structure of the dataset before cleaning.
 
-```{r sanity check, echo=TRUE, include=FALSE}
+```{r sanity check, echo=TRUE, results="hide", message=FALSE, warning=FALSE}
 #sanity check 
 str(rawdata)           # Inspect structure and summary
 summary(rawdata)
@@ -145,8 +137,9 @@ unique(rawdata$Year)
 
 ### Clean Data {#clean-data}
 
-Steps and code for cleaning the data.
-```{r cleaning data, echo=TRUE, include=FALSE}
+The dataset initially included various entities, such as global regions and income levels. To focus on country-level analysis, these entities were excluded. Additionally, the data was streamlined to 5-year intervals for clarity, which involved removing the years 2018 and 2019. For simplicity and readability, the variable representing prevalence was also renamed.
+
+```{r cleaning data, echo=TRUE, message=FALSE, warning=FALSE}
 # Cleaning the data 
 # Remove specific entities
 countries_data <- rawdata[!rawdata$Entity %in% c("East Asia and Pacific (WB)", "Sub-Saharan Africa (WB)", 
@@ -167,7 +160,10 @@ countries_data <- countries_data %>%
 ```
 
 # Loading and cleaning world data in order to merge with smoke data
-```{r, echo=TRUE, include=FALSE}
+
+In this section, the world map data was loaded using the ne_countries() function, which provides a geospatial dataset containing geographic and country-level information. To ensure compatibility with the smoking data, discrepancies in ISO country codes between the world map dataset (world) and the smoking prevalence dataset (countries_data) were identified. Specifically, any codes present in countries_data but missing in world, and vice versa, were highlighted. To address these discrepancies the function fix_iso_codes() was created to correct mismatched ISO codes.
+
+```{r, echo=TRUE, results="hide" , message=FALSE, warning=FALSE}
 # Load world map data
 world <- ne_countries(scale = "medium", returnclass = "sf")
 
@@ -192,8 +188,11 @@ world <- fix_iso_codes(world)
 
 ### Merge Data {#merge-data}
 
-Explanation and code for merging the datasets.
-```{r, echo=TRUE, include=FALSE}
+To prepare the datasets for visualization, the world map data and the cleaned smoking prevalence data were merged using the left_join() function. The datasets were aligned by matching the ISO country codes (iso_a3 in the world dataset and Code in the smoking dataset). During this process, any missing prevalence values were replaced with 0 using the mutate() function, ensuring that all countries had defined values for visualization, even if data was unavailable. Duplicate entries were identified and removed to maintain data integrity.
+
+To make the data compatible with interactive visualizations in Plotly, the geometric information in the sf object was removed using the st_set_geometry(NULL) function. A detailed inspection of the merged dataset was performed. Finally, distributions of data across years and countries were tabulated to confirm consistency and readiness for visualization. This step ensured a clean, structured dataset suitable for creating accurate and informative visualizations.
+
+```{r, echo=TRUE, results="hide", message=FALSE, warning=FALSE}
 # Merge datasets, sanity check/clean merged data 
 # Merge datasets
 map_data <- world %>%
@@ -235,34 +234,12 @@ table(plot_data$iso_a3)
 
 ### Description of Data {#description-of-data}
 
-Summary of the cleaned data, including key variables.
-
-# creating variables 
-
-In order to create my visualization, I had to create new variables. 
-I got variable world from the function sf, which contains the resources necessary for my analysis. 
-I then merged my world data and my smoking data into 'map_data' via the ISO code. 
-
-
-# cleaning data
-after my initial sanity check, I started to clean my data. 
-The data contained specific entities such as different regions of 
-the globe and the different income levels. In order to visualize the data I had to take these out. Further more, 
-I wanted to visualize the data by 5 years so i got rid of 2018 and 2019.
-I also renamed the variable prevalence for ease.and fixed my missing isos
-
-
-# description of the cleaned data 
-Entity refers to the name of the country. Code refers to the OWID internal entity code that we use if the entity is a country or region. Year refers to the years of the prevalence. Prevalence.of.current.tobacco.use....of.adults. refers to the prevalence of current tobacco users. 
+The cleaned dataset consists of country-level information on smoking prevalence among adults from 2000 to 2020, focusing on 5-year intervals. Key variables include Entity, which represents the name of each country; Code, the unique ISO-3 country code used for data alignment; Year, indicating the specific year of observation; and Prevalence, which provides the percentage of the adult population currently using tobacco products. The data has been meticulously cleaned to exclude regional or global aggregates and irrelevant entities, ensuring it accurately reflects country-level trends. Furthermore, missing values in prevalence have been accounted for, and duplicate entries removed, resulting in a comprehensive and structured dataset ideal for visualizing smoking trends over time.
 
 ---
 
 ### Initial Visualisation {#initial-visualisation}
 
-Code and output for the initial visualisation.
-
-### Visualization {#visualization}
-This is the very first visualization I got for my data. 
 The initial visualization provided a basic representation of smoking prevalence on a static map. While it successfully displayed the prevalence rates for countries, it lacked interactivity and failed to account for changes across years. Users could not explore how smoking prevalence evolved over time or access specific data points for each country. The map presented a single snapshot without the ability to delve into detailed information, such as individual country names or exact prevalence percentages. These limitations highlighted the need for a more dynamic and informative visualization to enhance user engagement and understanding.
 
 ```{r}
